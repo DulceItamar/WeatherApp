@@ -113,9 +113,6 @@ class BaseTabBarController: UITabBarController {
         guard index < viewControllersList.count else { return }
         selectedViewController = viewControllersList[index]
     }
-    
-  
-   
 }
 
 
