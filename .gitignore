@@ -1,7 +1,8 @@
 # Created by https://www.toptal.com/developers/gitignore/api/swift,
 # Edit at https://www.toptal.com/developers/gitignore?templates=swift,
 
-#!! ERROR:  is undefined. Use list command to see defined gitignore types !!#
+# Ignore the configuration file 
+DevelopmentConfig.xcconfig
 
 ### Swift ###
 # Xcode
