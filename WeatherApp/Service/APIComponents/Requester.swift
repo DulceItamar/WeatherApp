@@ -11,12 +11,14 @@ protocol RequesterProtocol {
 }
 
 class Requester: RequesterProtocol {
-    func execute(url: URL, endpoint: Endpoint, complentionBlock: @escaping (Result<Data,NetworkError>)  -> ()) {
+    
+    
+    func execute(url: URL, endpoint: Endpoint, complentionBlock: @escaping (Result<Data,NetworkError>)  -> Void) {
         
         
         let urlRequest = buildRequest(url: url, endpoint: endpoint)
     
-        let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+        let task: Void = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
             
             //Handle errors
             if let error = error {
@@ -45,6 +47,9 @@ class Requester: RequesterProtocol {
             return
          
         }
+        .resume()
+        
+        
     }
     
     
