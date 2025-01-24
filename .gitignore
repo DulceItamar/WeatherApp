@@ -1,8 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/swift,
 # Edit at https://www.toptal.com/developers/gitignore?templates=swift,
 
-# Ignore the configuration file 
-DevelopmentConfig.xcconfig
+# Ignore the configuration file
+*.xcconfig 
+!DevelopmentConfig.xcconfig
 
 ### Swift ###
 # Xcode
@@ -12,7 +13,7 @@ DevelopmentConfig.xcconfig
 ## User settings
 xcuserdata/
 
-.DS_Store
+*.DS_Store
 
 ## compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
 *.xcscmblueprint
@@ -89,5 +90,10 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
+
+# Xcode project settings
+*.pbxproj
+*.xcscheme
+
 
 # End of https://www.toptal.com/developers/gitignore/api/swift,
