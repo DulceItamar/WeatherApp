@@ -3,7 +3,7 @@
 
 # Ignore the configuration file
 *.xcconfig 
-!DevelopmentConfig.xcconfig
+DevelopmentConfig.xcconfig
 
 ### Swift ###
 # Xcode
