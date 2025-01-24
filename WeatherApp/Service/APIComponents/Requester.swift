@@ -9,8 +9,7 @@ import Foundation
 protocol RequesterProtocol {
     func execute(url: URL, endpoint: Endpoint, complentionBlock: @escaping (Result<Data, NetworkError>)  -> () )
 }
-//
-//
+
 class Requester: RequesterProtocol {
     func execute(url: URL, endpoint: Endpoint, complentionBlock: @escaping (Result<Data,NetworkError>)  -> ()) {
         
@@ -57,9 +56,4 @@ class Requester: RequesterProtocol {
         
         return request
     }
-
-
-
-
-    
 }
