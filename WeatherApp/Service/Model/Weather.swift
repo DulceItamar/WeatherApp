@@ -9,14 +9,14 @@ import Foundation
 
 
 struct WeatherResponse: Decodable {
-    let list: [WeatherData]
+//    let list: [WeatherData]
     let city: City
 }
 
 
 struct WeatherData: Decodable {
     //dt
-    let currentDate: TimeInterval
+    let currentDate: Int
     
     //main
     let currentTemperature: Double
@@ -28,7 +28,7 @@ struct WeatherData: Decodable {
     let windSpeed: Double
     
     //weather
-    let weather: Weather
+    let weather: [Weather]
 }
 
 
@@ -39,68 +39,79 @@ extension WeatherData {
         case currentDate = "dt"
         
         case main
+        case wind
+        case weather
+        
+    }
+    
+    
+    
+    
+    enum MainKeys: String, CodingKey {
         case currentTemperature = "temp"
         case maxTemperature = "temp_max"
         case minTemperature = "temp_min"
         case humidity
         
-        case clouds
-        case windSpeed = "speed"
-        
-        case weather
     }
     
-    init(from decoder: any Decoder) throws {
+    
+    enum WindKeys: String, CodingKey {
+        case windSpeed = "speed"
+    }
+    
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.currentDate = try container.decode(TimeInterval.self, forKey: .currentDate)
         
-        let main = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .main)
+        self.currentDate = try container.decode(Int.self, forKey: .currentDate)
+        
+        let main = try container.nestedContainer(keyedBy: MainKeys.self, forKey: .main)
         self.currentTemperature = try main.decode(Double.self, forKey: .currentTemperature)
         self.maxTemperature = try main.decode(Double.self, forKey: .maxTemperature)
         self.minTemperature = try main.decode(Double.self, forKey: .minTemperature)
         self.humidity = try main.decode(Int.self, forKey: .humidity)
         
         
-        let clouds = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .clouds)
-        self.windSpeed = try clouds.decode(Double.self, forKey: .windSpeed)
+        let wind = try container.nestedContainer(keyedBy: WindKeys.self, forKey: .wind)
+        self.windSpeed = try wind.decode(Double.self, forKey: .windSpeed)
         
-        self.weather = try container.decode(Weather.self, forKey: .weather)
+        
+        self.weather = try container.decode([Weather].self, forKey: .weather)
     }
 }
 
 struct Weather: Decodable {
-    let mainLabel: String
+    let main: String
     let description: String
     let icon: String
     
     
-enum WeatherKeys: String, CodingKey {
-    case mainLabel = "main"
-    case description
-    case icon
-}
+
 }
 
 struct City: Decodable {
-    var id: String = UUID().uuidString
+//    var id: String = UUID().uuidString
     let name: String
     let country: String
-    let coordinates: Coordinates
-    let sunset : TimeInterval
-    let sunrise: TimeInterval
+    let coordinates: Coord
     
-    enum cityKeys: String, CodingKey {
+    
+    enum CodingKeys: String, CodingKey {
+        case name
+        case country
         case coordinates = "coord"
+    }
+    
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.country = try container.decode(String.self, forKey: .country)
+        self.coordinates = try container.decode(Coord.self, forKey: .coordinates)
     }
 }
 
 
-struct Coordinates: Decodable {
-    let latitude: Double
-    let longitude: Double
-    
-    enum CoordinatesKeys: String, CodingKey {
-        case latitude = "lat"
-        case longitude = "long"
-    }
+struct Coord: Decodable {
+    let lat: Double
+    let lon: Double
 }

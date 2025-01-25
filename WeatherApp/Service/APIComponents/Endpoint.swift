@@ -16,7 +16,7 @@ protocol EndPointProtocol {
  */
 
 struct Endpoint: EndPointProtocol {
-    var coordinates: Coordinates
+    var coordinates: Coord
     var method: HTTPMethod
 
 }

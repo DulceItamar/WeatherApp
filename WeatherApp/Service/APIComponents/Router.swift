@@ -27,8 +27,8 @@ class Router: RouterProtocol {
         
         guard let url = url else { throw NetworkError.invalidURL }
         
-        let latiude = String(describing: endpoint.coordinates.latitude)
-        let longitude = String(describing: endpoint.coordinates.longitude)
+        let latiude = String(describing: endpoint.coordinates.lat)
+        let longitude = String(describing: endpoint.coordinates.lon)
         let apiKey: String  = try Configuration.value(for: "API_KEY")
         
         

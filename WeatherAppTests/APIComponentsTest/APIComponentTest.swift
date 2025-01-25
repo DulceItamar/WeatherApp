@@ -25,7 +25,7 @@ final class APIComponentTest: XCTestCase {
     func testRouterOfAPIComponentsGetWeatherURLIsRight() throws {
         let router = Router(appEnviroment: .baseURL)
      
-        let coordinates = Coordinates(latitude: 44.34, longitude: 10.99)
+        let coordinates = Coord(lat: 44.34, lon: 10.99)
         let endpoint = Endpoint(coordinates: coordinates, method: .GET)
        
        
@@ -43,22 +43,65 @@ final class APIComponentTest: XCTestCase {
         let requester = Requester()
         let router = Router(appEnviroment: .baseURL)
      
-        let coordinates = Coordinates(latitude: 44.34, longitude: 10.99)
+        let coordinates = Coord(lat: 44.34, lon: 10.99)
         let endpoint = Endpoint(coordinates: coordinates, method: .GET)
        
         
         let expectedURL =  try router.getWeatherURL(endpoint: endpoint)
+        
+        let expectation = expectation(description: "Requester completes network call and parses data")
+        
+        
         requester.execute(url: expectedURL!, endpoint: endpoint) { result in
             switch result {
                 case .success(let data):
-                    XCTAssertNotNil(data)
+                   
                     print("Data received: \(data)")
-                    
+                    XCTAssertNotNil(data)
                 case .failure(let error):
                     XCTFail("Request failed with error: \(error)")
                     print("Error occurred: \(error)")
             }
+            
+            expectation.fulfill()
         }
+        
+        wait(for: [expectation], timeout: 5.0)
+    }
+    
+    
+    func testParserOfAPIComponentsGetWeatherURLIsRight() throws {
+        let requester = Requester()
+        let router = Router(appEnviroment: .baseURL)
+        let parser = Parser()
+     
+        let coordinates = Coord(lat: 44.34, lon: 10.99)
+        let endpoint = Endpoint(coordinates: coordinates, method: .GET)
+       
+        
+        let expectedURL =  try router.getWeatherURL(endpoint: endpoint)
+        
+        // Crear una expectativa para manejar la asincronía
+           let expectation = expectation(description: "Requester completes network call and parses data")
+        
+        requester.execute(url: expectedURL!, endpoint: endpoint) { result in
+            
+            
+            switch result {
+                case .success(let data):
+                   let weatherResponse = parser.parse(data: data, type: WeatherResponse.self)
+                    print("Received data: \(data)")
+                    print("Data received: \(String(describing: weatherResponse?.city.name))")
+                    
+                    XCTAssertNotNil(weatherResponse)
+                case .failure(let error ):
+                    XCTFail("Request failed with error: \(error)")
+                    print("Error occurred: \(error)")
+            }
+            
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 10.0)
     }
 
 }
