@@ -17,6 +17,7 @@ enum NetworkError: Error, LocalizedError {
     case networkError(String)
     case invalidResponse
     case noData
+    case parsingError
     
     var errorDescription: String? {
         switch self {
@@ -40,6 +41,8 @@ enum NetworkError: Error, LocalizedError {
             case .noData:
                 return "No data"
                 
+            case .parsingError:
+                return "Error parsing data"
         }
     }
 }
