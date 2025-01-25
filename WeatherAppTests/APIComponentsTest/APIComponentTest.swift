@@ -103,5 +103,23 @@ final class APIComponentTest: XCTestCase {
         }
         wait(for: [expectation], timeout: 10.0)
     }
+    
+    
+    func testAPIWeatherFetchWeatherDataIsRight(){
+        let api = APIWeather()
+        
+        let coordinates = Coord(lat: 44.34, lon: 10.99)
+        
+        api.fetchWeatherData(coordinates: coordinates) { result in
+            switch result {
+                case .success(let weatherResponse):
+                    XCTAssertNotNil(weatherResponse)
+                    print(weatherResponse)
+                case .failure(let error):
+                    print("This an error: \(error)")
+            }
+        }
+    }
+
 
 }
